@@ -17,25 +17,34 @@ for filename in os.listdir(dir):
             if (record['Unidades netas vendidas'] == '' ):
                 continue
             if 'ASIN/ISBN' in record:
-                asin = 'ASIN/ISBN'
+                asin_name = 'ASIN/ISBN'
             else:
-                asin = 'ASIN'
+                asin_name = 'ASIN'
             fecha = record['Fecha de las regalías']
+            mercado = record['Mercado']
+            asin=record[asin_name]
             if not fecha in unit_sales :
-                 unit_sales[fecha] = {}
-            unit_sales[fecha][record[asin]]=record['Unidades netas vendidas']
-            title[record[asin]] = record['Título']
+                unit_sales[fecha] = {}
+            if not asin in unit_sales[fecha]:
+                unit_sales[fecha][asin] = {}
+            if not mercado in unit_sales[fecha][asin]:
+                unit_sales[fecha][asin][mercado] = record['Unidades netas vendidas']
+            title[asin] = record['Título']
 
 
 asin_sales={}
 for fecha in unit_sales:
     for asin in unit_sales[fecha]:
-        if asin in asin_sales:
-            asin_sales[asin] = asin_sales[asin]+unit_sales[fecha][asin]
-        else:
-            asin_sales[asin] = unit_sales[fecha][asin]
+        for mercado in unit_sales[fecha][asin]:
+            if asin in asin_sales:
+                asin_sales[asin] = asin_sales[asin]+unit_sales[fecha][asin][mercado]
+            else:
+                asin_sales[asin] = unit_sales[fecha][asin][mercado]
 
 print("Title, Units")
 for asin in asin_sales:
-    print(f"\"{title[asin]}\", {asin_sales[asin]}")
+    if asin in title:
+        print(f"\"{title[asin]}\", {asin_sales[asin]}")
+    else:
+        print(f"\"{asin}\", {asin_sales[asin]}")
     
