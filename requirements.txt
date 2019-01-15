@@ -1,1 +1,5 @@
+pyexcel
+pyexcel-ods
 pyexcel-ods3
+pyexcel-xls
+pyexcel-xlsx
