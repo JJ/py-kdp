@@ -37,5 +37,5 @@ for fecha in unit_sales:
 
 print("Title, Units")
 for asin in asin_sales:
-    print(title[asin], ", ", asin_sales[asin])
+    print(f"\"{title[asin]}\", {asin_sales[asin]}")
     
